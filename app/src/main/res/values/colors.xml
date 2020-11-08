@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="gray">#1a1a1a</color>
+
+    <color name="bg_outgoing_start">#1c7ded</color>
+    <color name="bg_outgoing_end">#9d0bbc</color>
+
+
+    <!-- Chat Themes -->
+    <color name="theme_one_start">#1c7ded</color>
+    <color name="theme_one_end">#9d0bbc</color>
+
+    <color name="theme_two_start">#077b8a</color>
+    <color name="theme_two_end">#5c3c92</color>
+
+    <color name="theme_three_start">#809088D4</color>
+    <color name="theme_three_end">#423871</color>
+
+    <color name="theme_four_start">#cbbcb1</color>
+    <color name="theme_four_end">#af6b58</color>
+
+    <color name="theme_five_start">#fad5ad</color>
+    <color name="theme_five_end">#adb36e</color>
+
+    <color name="theme_six_start">#734046</color>
+    <color name="theme_six_end">#321f28</color>
+
+    <color name="theme_seven_start">#99a8b2</color>
+    <color name="theme_seven_end">#1f6f8b</color>
+</resources>
