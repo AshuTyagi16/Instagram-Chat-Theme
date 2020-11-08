@@ -7,30 +7,26 @@ import android.os.Looper
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.ProgressBar
-import android.widget.Spinner
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.instagramchattheme.ui.custom.ColorThemeLayoutManager
 import com.example.instagramchattheme.R
 import com.example.instagramchattheme.model.ChatTheme
-import com.example.instagramchattheme.util.DataUtils
-import com.example.instagramchattheme.util.SpacesItemDecoration
-import com.example.instagramchattheme.util.dpToPx
+import com.example.instagramchattheme.util.*
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.cell_outgoing.view.*
 
 class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
-    private lateinit var rvChat: RecyclerView
-    private lateinit var progressBar: ProgressBar
     private lateinit var chatAdapter: ChatAdapter
-    private lateinit var linearLayoutManager: ColorThemeLayoutManager
+    private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var spacesItemDecoration: SpacesItemDecoration
     private lateinit var spinnerAdapter: ArrayAdapter<ChatTheme>
     private lateinit var spinner: Spinner
     private lateinit var dataUtils: DataUtils
+    private lateinit var animatedColor: AnimatedColor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,15 +34,20 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         inject()
         setupToolbar()
         setupRecyclerView()
+        setupListeners()
     }
 
     private fun inject() {
         dataUtils = DataUtils(this)
         chatAdapter = ChatAdapter()
-        linearLayoutManager = ColorThemeLayoutManager(this, RecyclerView.VERTICAL, false)
+        linearLayoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         spacesItemDecoration = SpacesItemDecoration(50)
         spinnerAdapter =
             ArrayAdapter(this, android.R.layout.simple_list_item_1, dataUtils.getChatThemes())
+        animatedColor = AnimatedColor(
+            ContextCompat.getColor(this, R.color.bg_outgoing_start),
+            ContextCompat.getColor(this, R.color.bg_outgoing_end)
+        )
     }
 
     private fun setupToolbar() {
@@ -58,8 +59,6 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     }
 
     private fun setupRecyclerView() {
-        rvChat = findViewById(R.id.rvChat)
-        progressBar = findViewById(R.id.progressBar)
         rvChat.apply {
             adapter = chatAdapter
             layoutManager = linearLayoutManager
@@ -84,6 +83,19 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         spinner.onItemSelectedListener = this
     }
 
+    private fun setupListeners() {
+        rvChat.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                recyclerView.forEachVisibleHolder { holder: RecyclerView.ViewHolder ->
+                    if (holder is OutgoingChatViewHolder) {
+                        changeDrawableColor(holder)
+                    }
+                }
+            }
+        })
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menu?.let {
             setupSpinner(it)
@@ -99,12 +111,27 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
         (spinner.selectedItem as ChatTheme).let {
-            linearLayoutManager.updateColors(it.startColor, it.endColor)
+            animatedColor = AnimatedColor(it.startColor, it.endColor)
             rvChat.smoothScrollBy(0, 1)
         }
     }
 
     override fun onNothingSelected(p0: AdapterView<*>?) {
 
+    }
+
+    private fun changeDrawableColor(holder: OutgoingChatViewHolder) {
+        holder.itemView.post {
+            ContextCompat.getDrawable(this, R.drawable.bg_round_corner_outgoing)
+                ?.let { incomingBgDrawable ->
+                    val color = animatedColor.with(getFloatRange(holder.itemView))
+                    incomingBgDrawable.updateTint(color)
+                    holder.itemView.tvOutgoingMessage.background = incomingBgDrawable
+                }
+        }
+    }
+
+    private fun getFloatRange(view: View): Float {
+        return 1f - (view.absY() / resources.displayMetrics.heightPixels.toFloat())
     }
 }

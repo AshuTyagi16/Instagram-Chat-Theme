@@ -4,6 +4,7 @@ import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import android.view.View
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.recyclerview.widget.RecyclerView
 
 
 fun View.absY(): Float {
@@ -20,4 +21,12 @@ fun Drawable.updateTint(color: Int) {
 
 fun Int.dpToPx(): Int {
     return this * Resources.getSystem().displayMetrics.density.toInt()
+}
+
+inline fun <reified T : RecyclerView.ViewHolder> RecyclerView.forEachVisibleHolder(
+    action: (T) -> Unit
+) {
+    for (i in 0 until childCount) {
+        action(getChildViewHolder(getChildAt(i)) as T)
+    }
 }
