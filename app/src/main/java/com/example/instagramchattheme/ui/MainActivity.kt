@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         linearLayoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         spacesItemDecoration = SpacesItemDecoration(50)
         spinnerAdapter =
-            ArrayAdapter(this, android.R.layout.simple_list_item_1, dataUtils.getChatThemes())
+            ArrayAdapter(this, R.layout.cell_spinner_item, dataUtils.getChatThemes())
         animatedColor = AnimatedColor(
             ContextCompat.getColor(this, R.color.bg_outgoing_start),
             ContextCompat.getColor(this, R.color.bg_outgoing_end)
@@ -78,7 +78,6 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         menuInflater.inflate(R.menu.chat_themes, menu)
         val item: MenuItem = menu.findItem(R.id.spinner)
         spinner = item.actionView as Spinner
-        spinner.dropDownWidth = 150.dpToPx()
         spinner.adapter = spinnerAdapter
         spinner.onItemSelectedListener = this
     }
