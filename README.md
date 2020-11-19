@@ -1,6 +1,10 @@
 # Instagram-Chat-Theme
 This is a demo app which demonstrates how can we add chat themes like Instagram
 <br>
+<br>
+Blog Post : https://medium.com/design-bootcamp/instagram-like-chat-theme-animation-32cc56b483ed
+<br>
+<br>
 <div style="display:flex;">
   <img width="270" height="585" src="https://user-images.githubusercontent.com/18714067/98468802-1c006900-2202-11eb-9e65-9bfdfbd35e02.jpeg">
   
